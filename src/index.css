@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Caramel Light Theme */
+    --background: 40 40% 97%;
+    --foreground: 30 25% 15%;
+
+    --card: 38 45% 95%;
+    --card-foreground: 30 25% 15%;
+
+    --popover: 40 40% 97%;
+    --popover-foreground: 30 25% 15%;
+
+    --primary: 30 70% 50%;
+    --primary-foreground: 40 40% 98%;
+
+    --secondary: 35 60% 85%;
+    --secondary-foreground: 30 25% 15%;
+
+    --muted: 38 30% 90%;
+    --muted-foreground: 30 15% 40%;
+
+    --accent: 25 80% 55%;
+    --accent-foreground: 40 40% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 35 30% 85%;
+    --input: 35 30% 85%;
+    --ring: 30 70% 50%;
+
+    --radius: 1rem;
+
+    /* Custom caramel tokens */
+    --caramel: 30 70% 50%;
+    --caramel-light: 35 60% 70%;
+    --caramel-dark: 25 65% 35%;
+    --cream: 40 40% 97%;
+    --golden: 45 85% 60%;
+    --chocolate: 25 40% 25%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(30 70% 50%), hsl(35 75% 60%));
+    --gradient-hero: linear-gradient(180deg, hsl(40 40% 97%), hsl(38 45% 92%));
+    
+    /* Shadows & Effects */
+    --shadow-caramel: 0 10px 40px -10px hsl(30 70% 50% / 0.3);
+    --shadow-float: 0 20px 60px -15px hsl(30 70% 50% / 0.4);
+    --glow-caramel: 0 0 30px hsl(30 70% 50% / 0.5);
+
+    --sidebar-background: 40 40% 97%;
+    --sidebar-foreground: 30 25% 15%;
+    --sidebar-primary: 30 70% 50%;
+    --sidebar-primary-foreground: 40 40% 98%;
+    --sidebar-accent: 38 45% 90%;
+    --sidebar-accent-foreground: 30 25% 15%;
+    --sidebar-border: 35 30% 85%;
+    --sidebar-ring: 30 70% 50%;
+  }
+
+  .dark {
+    /* Chocolate Dark Theme */
+    --background: 25 35% 12%;
+    --foreground: 40 40% 95%;
+
+    --card: 25 30% 15%;
+    --card-foreground: 40 40% 95%;
+
+    --popover: 25 35% 12%;
+    --popover-foreground: 40 40% 95%;
+
+    --primary: 35 70% 60%;
+    --primary-foreground: 25 35% 12%;
+
+    --secondary: 28 30% 25%;
+    --secondary-foreground: 40 40% 95%;
+
+    --muted: 28 25% 20%;
+    --muted-foreground: 35 20% 65%;
+
+    --accent: 30 75% 55%;
+    --accent-foreground: 25 35% 12%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 40 40% 95%;
+
+    --border: 28 25% 25%;
+    --input: 28 25% 25%;
+    --ring: 35 70% 60%;
+
+    /* Custom dark tokens */
+    --caramel: 35 70% 60%;
+    --caramel-light: 38 65% 70%;
+    --caramel-dark: 30 60% 45%;
+    --cream: 28 20% 20%;
+    --golden: 45 75% 65%;
+    --chocolate: 25 35% 12%;
+    
+    /* Dark gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(35 70% 60%), hsl(30 75% 55%));
+    --gradient-hero: linear-gradient(180deg, hsl(25 35% 12%), hsl(28 30% 18%));
+    
+    /* Dark shadows */
+    --shadow-caramel: 0 10px 40px -10px hsl(35 70% 60% / 0.4);
+    --shadow-float: 0 20px 60px -15px hsl(35 70% 60% / 0.5);
+    --glow-caramel: 0 0 40px hsl(35 70% 60% / 0.6);
+
+    --sidebar-background: 25 35% 12%;
+    --sidebar-foreground: 40 40% 95%;
+    --sidebar-primary: 35 70% 60%;
+    --sidebar-primary-foreground: 25 35% 12%;
+    --sidebar-accent: 28 30% 20%;
+    --sidebar-accent-foreground: 40 40% 95%;
+    --sidebar-border: 28 25% 25%;
+    --sidebar-ring: 35 70% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* 3D Transform utilities */
+  .transform-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .hover-lift {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: var(--shadow-float);
+  }
+
+  /* Caramel glow effect */
+  .caramel-glow {
+    box-shadow: var(--glow-caramel);
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
