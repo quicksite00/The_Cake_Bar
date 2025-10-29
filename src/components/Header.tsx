@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 import ThemeToggle from "./ThemeToggle";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
   { name: "Home", href: "#home" },
-  { name: "Menu", href: "#menu-section" },
-  { name: "Gallery", href: "#gallery-section" },
+  { name: "Menu", href: "#menu" },
+  { name: "Gallery", href: "#gallery" },
   { name: "About", href: "#about" },
   { name: "Reviews", href: "#reviews" },
   { name: "Contact", href: "#contact" },
@@ -20,65 +21,55 @@ const Header = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (href) => {
-    setIsOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const handleLogoClick = () => {
-    const homeElement = document.querySelector("#home");
-    if (homeElement) {
-      homeElement.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
-    <header
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#8B4513] backdrop-blur-md shadow-lg border-b border-[#654321]" // Rich brown background
-          : "bg-[#8B4513]" // Same brown color
+          ? "bg-[#8B7355] backdrop-blur-md shadow-lg border-b border-border/50"
+          : "bg-[#A0826D] backdrop-blur-sm"
       }`}
     >
       <nav className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          {/* Logo Section - NO ANIMATION */}
-          <div 
-            className="logo cursor-pointer"
-            onClick={handleLogoClick}
+          <motion.a
+            href="#home"
+            className="flex items-center gap-3 cursor-pointer"
+            whileHover={{ scale: 1.02 }}
           >
-            <div className="logo-icon">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-amber-600 bg-amber-50 flex items-center justify-center overflow-hidden shadow-md flex-shrink-0">
               <img 
                 src="/Logo1.png" 
                 alt="The Cake Bar Logo" 
-                className="logo-image"
-                draggable={false}
+                className="w-12 h-12 md:w-16 md:h-16 object-contain select-none"
               />
             </div>
-            <div className="logo-text">
-              <h1>The Cake Bar</h1>
+            <div className="hidden sm:block select-none">
+              <h1 className="text-xl md:text-2xl font-bold text-white">The Cake Bar</h1>
+              <p className="text-xs md:text-sm text-white/90">Because Every Occasion Deserves a Cake</p>
             </div>
-          </div>
+          </motion.a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <button
+              <a
                 key={item.name}
-                onClick={() => handleNavClick(item.href)}
-                className="text-white hover:text-amber-200 transition-colors duration-300 font-medium relative group cursor-pointer text-lg"
+                href={item.href}
+                className="text-white hover:text-white/80 transition-colors duration-300 font-medium relative group"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById(item.href.substring(1))?.scrollIntoView({ behavior: "smooth" });
+                }}
               >
                 {item.name}
-                <span className="absolute bottom-0 left-0 w-0 h-1 bg-amber-200 group-hover:w-full transition-all duration-300" />
-              </button>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
+              </a>
             ))}
             <ThemeToggle />
           </div>
@@ -90,107 +81,46 @@ const Header = () => {
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(!isOpen)}
-              className="rounded-full hover:bg-[#654321] text-white"
+              className="rounded-full"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X /> : <Menu />}
             </Button>
           </div>
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="md:hidden mt-4 bg-[#8B4513] rounded-lg shadow-lg border border-[#654321]">
-            <div className="flex flex-col gap-2 py-4">
-              {navItems.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => handleNavClick(item.href)}
-                  className="text-white hover:text-amber-200 hover:bg-[#654321] transition-colors duration-300 font-medium px-6 py-3 text-left cursor-pointer text-lg"
-                >
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden mt-4"
+            >
+              <div className="flex flex-col gap-4 py-4">
+                {navItems.map((item, index) => (
+                  <motion.a
+                    key={item.name}
+                    href={item.href}
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsOpen(false);
+                      document.getElementById(item.href.substring(1))?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="text-white hover:text-white/80 transition-colors duration-300 font-medium px-4 py-2 rounded-lg hover:bg-white/10"
+                  >
+                    {item.name}
+                  </motion.a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
-
-      {/* CSS Styles */}
-      <style jsx>{`
-        .logo {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-        }
-        
-        .logo-icon {
-          width: 100px;
-          height: 100px;
-          background-color: #f8e3d0;
-          border-radius: 70%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-          border: 5px solid #bd700cff;
-        }
-        
-        .logo-image {
-          width: 85%;
-          height: auto;
-          border-radius: 70%;
-          object-fit: fit;
-        }
-        
-        .logo-text h1 {
-          font-size: 45px;
-          color: #FFFFFF; /* White text for dominance */
-          margin: 0;
-          font-weight: 800;
-          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-          .logo-text h1 {
-            font-size: 35px;
-          }
-          
-          .logo-icon {
-            width: 90px;
-            height: 80px;
-          }
-        }
-
-        @media (max-width: 640px) {
-          .logo-text h1 {
-            font-size: 28px;
-          }
-          
-          .logo-icon {
-            width: 80px;
-            height: 70px;
-            border-width: 4px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .logo {
-            gap: 10px;
-          }
-          
-          .logo-text h1 {
-            font-size: 24px;
-          }
-          
-          .logo-icon {
-            width: 70px;
-            height: 60px;
-            border-width: 3px;
-          }
-        }
-      `}</style>
-    </header>
+    </motion.header>
   );
 };
 
